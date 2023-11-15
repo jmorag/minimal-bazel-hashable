@@ -1,10 +1,17 @@
-# Give your project a name. :)
-workspace(name = "YOUR_PROJECT_NAME_HERE")
+workspace(name = "bazel-hashable")
 
 # Load the repository rule to download an http archive.
 load(
     "@bazel_tools//tools/build_defs/repo:http.bzl",
     "http_archive"
+)
+
+# Download latest rules_cc
+http_archive(
+   name = "rules_cc",
+   urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.9/rules_cc-0.0.9.tar.gz"],
+   sha256 = "2037875b9a4456dce4a79d112a8ae885bbc4aad968e6587dca6e64f3a0900cdf",
+   strip_prefix = "rules_cc-0.0.9",
 )
 
 # Download rules_haskell and make it accessible as "@rules_haskell".
@@ -35,30 +42,11 @@ load(
 
 stack_snapshot(
     name = "stackage",
-    extra_deps = {"zlib": ["@zlib.dev//:zlib"]},
-    packages = ["zlib"],
-
-    # LTS snapshot published for ghc-9.2.5 (default version used by rules_haskell)
-    snapshot = "lts-20.3",
-
-    # This uses an unpinned version of stack_snapshot, meaning that stack is invoked on every build.
-    # To switch to pinned stackage dependencies, run `bazel run @stackage-unpinned//:pin` and
-    # uncomment the following line.
-    # stack_snapshot_json = "//:stackage_snapshot.json",
+    packages = ["hashable-1.4.3.0"],
+    snapshot = "nightly-2023-11-07",
 )
 
 # Download a GHC binary distribution from haskell.org and register it as a toolchain.
 rules_haskell_toolchains(
-    version = "9.2.5",
-)
-
-http_archive(
-    name = "zlib.dev",
-    build_file = "//:zlib.BUILD.bazel",
-    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1",
-    strip_prefix = "zlib-1.2.11",
-    urls = [
-        "https://mirror.bazel.build/zlib.net/zlib-1.2.11.tar.gz",
-        "http://zlib.net/zlib-1.2.11.tar.gz",
-    ],
+    version = "9.6.3",
 )

@@ -1,8 +1,8 @@
 module Main where
 
-import Codec.Compression.Zlib (compress, decompress)
-import Prelude ((.), putStrLn)
+import Data.Hashable
+import System.Environment (getArgs)
 
-main = putStrLn "Hello from rules_haskell!"
-
-slowId = decompress . compress
+main = do
+  args <- getArgs
+  print (hash args)
